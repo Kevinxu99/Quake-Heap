@@ -3,43 +3,72 @@ $(document).ready(function() {
     var svg = canvas.append('svg')
         .attr('height',800)
         .attr('width',800);
+    var radius = 10;
 
-    function getTreeCoordinates(tree, node, x, dist, inc) {
-        var coordinates = [];
+    function getTreeCoordinates(coordinates, tree, node, x, dist, inc) {
+
         var nodeInfo = {
             id: node.id,
             cx: x,
             cy: node.cy,
             data: node.data
         }
-        coordinates.push(nodeInfo);
+        coordinates.heapCoordinates.push(nodeInfo);
 
         if(node.leftId == "-1" && node.rightId == "-1") {
             return coordinates;
         }
 
         var leftChild = tree.find(function(d){return d.id == node.leftId;});
+
+        var lineDist = Math.sqrt(dist**2+(node.cy-leftChild.cy)**2);
+        var lineLeft = {
+            id1 : node.id,
+            id2 : leftChild.id,
+            x1 : x-dist*(radius/lineDist),
+            y1 : node.cy-(node.cy-leftChild.cy)*(radius/lineDist),
+            x2 : x-dist+dist*(radius/lineDist),
+            y2 : leftChild.cy+(node.cy-leftChild.cy)*(radius/lineDist)
+        }
+        coordinates.lineCoordinates.push(lineLeft);
+
         if(node.rightId != "-1") {
-            var leftCoordinates = getTreeCoordinates(tree, leftChild, x-dist, dist-inc, inc);
-            coordinates = coordinates.concat(leftCoordinates);
+
+            coordinates = getTreeCoordinates(coordinates, tree, leftChild, x-dist, dist-inc, inc);
+
             var rightChild = tree.find(function(d){return d.id == node.rightId;});
-            var rightCoordinates = getTreeCoordinates(tree, rightChild, x+dist, dist-inc, inc);
-            coordinates = coordinates.concat(rightCoordinates);
+            coordinates = getTreeCoordinates(coordinates, tree, rightChild, x+dist, dist-inc, inc);
+
+            var lineRight = {
+                id1 : node.id,
+                id2 : rightChild.id,
+                x1 : x+dist*(radius/lineDist),
+                y1 : node.cy-(node.cy-leftChild.cy)*(radius/lineDist),
+                x2 : x+dist-dist*(radius/lineDist),
+                y2 : rightChild.cy+(node.cy-leftChild.cy)*(radius/lineDist)
+            }
+            coordinates.lineCoordinates.push(lineRight);
+
         } else {
-            var leftCoordinates = getTreeCoordinates(tree, leftChild, x, dist-inc, inc);
-            coordinates = coordinates.concat(leftCoordinates);
+
+            coordinates = getTreeCoordinates(coordinates, tree, leftChild, x, dist-inc, inc);
+
         }
 
         return coordinates;
     }
 
     function getCoordinates(data) {
+
         var y0 = 100;
         var x0 = 50;
         var xDist = 30;
         var yDist = 50;
         var xInc = 20;
-        var heapCoordinates = [];
+        var coordinates = {
+            heapCoordinates : [],
+            lineCoordinates : []
+        };
         var trees = data.treeList;
         for(var i=0; i<trees.length; i++) {
             var maxD = 0;
@@ -53,17 +82,17 @@ $(document).ready(function() {
             }
             var treeHeight = trees[i][maxIndex].degree-1;
             var x = x0 + xDist*treeHeight + xInc*treeHeight*(treeHeight-1);
-            var treeCoordinates = getTreeCoordinates(trees[i], trees[i][maxIndex], x, xDist+xInc*(treeHeight-1), xInc);
-            heapCoordinates = heapCoordinates.concat(treeCoordinates);
+            coordinates = getTreeCoordinates(coordinates, trees[i], trees[i][maxIndex], x, xDist+xInc*(treeHeight-1), xInc);
+            console.log(coordinates);
             var xMax = x0;
-            for(var j=0; j<treeCoordinates.length; j++) {
-                if(treeCoordinates[j].cx > xMax) {
-                    xMax = treeCoordinates[j].cx;
+            for(var j=0; j<coordinates.heapCoordinates.length; j++) {
+                if(coordinates.heapCoordinates[j].cx > xMax) {
+                    xMax = coordinates.heapCoordinates[j].cx;
                 }
             }
             x0 = xMax + xDist*2;
         }
-        return heapCoordinates;
+        return coordinates;
     }
 
     function drawHeap(heapCoordinates) {
@@ -82,7 +111,7 @@ $(document).ready(function() {
                .ease(d3.easeLinear)
                .attr('cx',(d)=>d.cx)
                .attr('cy',(d)=>d.cy)
-               .attr('r',10)
+               .attr('r',radius)
                .attr('fill','#f7ed7e')
                .attr('stroke','black');
 
@@ -105,7 +134,7 @@ $(document).ready(function() {
                    .ease(d3.easeLinear)
                    .attr('cx', (d)=> d.cx)
                    .attr('cy', (d)=> d.cy)
-                   .attr('r',10)
+                   .attr('r',radius)
                    .attr('fill','#f7ed7e')
                    .attr('stroke','black');
 
@@ -126,6 +155,42 @@ $(document).ready(function() {
                .duration(500)
                .ease(d3.easeLinear)
                .remove();
+    }
+
+    function drawLines(lineCoordinates) {
+
+        lines = svg.selectAll('line')
+                    .data(lineCoordinates,(d)=>d.id1+"to"+d.id2)
+                    .attr('x1',(d)=>d.x1)
+                    .attr('x2',(d)=>d.x2)
+                    .attr('y1',(d)=>d.y1)
+                    .attr('y2',(d)=>d.y2)
+                    .attr('stroke','black')
+
+        lines.transition()
+              .duration(750)
+              .delay(500)
+              .ease(d3.easeLinear);
+
+        lines.enter()
+              .append('line')
+              .attr('id',(d)=>d.id1+"to"+d.id2)
+              .transition()
+              .duration(750)
+              .delay(500)
+              .ease(d3.easeLinear)
+              .attr('x1',(d)=>d.x1)
+              .attr('x2',(d)=>d.x2)
+              .attr('y1',(d)=>d.y1)
+              .attr('y2',(d)=>d.y2)
+              .attr('stroke','black');
+
+        lines.exit()
+              .transition()
+              .duration(500)
+              .ease(d3.easeLinear)
+              .remove();
+
     }
 
     $('#insert').submit(function(event) {
@@ -150,12 +215,14 @@ $(document).ready(function() {
             dataType : 'json',
             success: function(result) {
                 if(result.status == "success") {
+
                     console.log('Insertion was successful.');
 
-                    var heapCoordinates = getCoordinates(result.data);
-                    console.log(heapCoordinates);
+                    var coordinates = getCoordinates(result.data);
 
-                    drawHeap(heapCoordinates);
+                    drawHeap(coordinates.heapCoordinates);
+
+                    drawLines(coordinates.lineCoordinates);
 
                 }
                 else {
@@ -185,12 +252,14 @@ $(document).ready(function() {
             dataType : 'json',
             success: function(result) {
                 if(result.status == "success") {
+
                     console.log('Deletion was successful.');
 
-                    var heapCoordinates = getCoordinates(result.data);
-                    console.log(heapCoordinates);
+                    var coordinates = getCoordinates(result.data);
 
-                    drawHeap(heapCoordinates);
+                    drawHeap(coordinates.heapCoordinates);
+
+                    drawLines(coordinates.lineCoordinates);
 
                 }
                 else {
