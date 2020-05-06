@@ -66,7 +66,12 @@ public class Demo {
 
     @GetMapping("/")
     public String start() {
-        return "home";
+        return "index";
+    }
+
+    @GetMapping("/demo")
+    public String demo() {
+        return "demo";
     }
 
     @PostMapping("/insert")

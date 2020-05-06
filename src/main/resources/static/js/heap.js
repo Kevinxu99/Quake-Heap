@@ -30,10 +30,10 @@ $(document).ready(function() {
             x2 : x-dist+dist*(radius/lineDist),
             y2 : leftChild.cy+(node.cy-leftChild.cy)*(radius/lineDist)
         }
-        coordinates.lineCoordinates.push(lineLeft);
 
         if(node.rightId != "-1") {
 
+            coordinates.lineCoordinates.push(lineLeft);
             coordinates = getTreeCoordinates(coordinates, tree, leftChild, x-dist, dist-inc, inc);
 
             var rightChild = tree.find(function(d){return d.id == node.rightId;});
@@ -51,6 +51,11 @@ $(document).ready(function() {
 
         } else {
 
+            lineLeft.x1 = x;
+            lineLeft.x2 = x;
+            lineLeft.y1 = node.cy+radius;
+            lineLeft.y2 = leftChild.cy-radius;
+            coordinates.lineCoordinates.push(lineLeft);
             coordinates = getTreeCoordinates(coordinates, tree, leftChild, x, dist-inc, inc);
 
         }
@@ -169,7 +174,7 @@ $(document).ready(function() {
 
         lines.transition()
               .duration(750)
-              .delay(500)
+              .delay(750)
               .ease(d3.easeLinear);
 
         lines.enter()
