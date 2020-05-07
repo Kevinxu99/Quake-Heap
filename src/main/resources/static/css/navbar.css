@@ -24,6 +24,12 @@ nav ul li a:after {
   background: #aaa;
   height: 1px;
 }
+
 nav ul li a:hover:after {
   width: 100%;
+}
+
+.navbar-custom {
+    background-color: #EEEEEE;
+    font-family: 'Oswald', sans-serif;
 }

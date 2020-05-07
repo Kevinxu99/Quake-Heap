@@ -79,29 +79,50 @@ public class Demo {
         quakeHeap.insert(node.getData());
         List<List<SimpleNode>> treeList = transformHeap();
         HeapData data = new HeapData(treeList, quakeHeap.getMaxDegree(), quakeHeap.getMin(), quakeHeap.getLeavesCount());
-        ServiceResponse<HeapData> response = new ServiceResponse<HeapData>("success",data);
+        ServiceResponse<HeapData> response = new ServiceResponse<HeapData>("success",data,"Insertion Successful");
         return new ResponseEntity<Object>(response, HttpStatus.OK);
     }
 
-    public void displayHeap() {
-        System.out.println("Displaying Heap");
-        for(QuakeNode q : quakeHeap.heap) {
-            System.out.println(q.getData());
-        }
-    }
     @PostMapping("/delete")
     public ResponseEntity<Object> delete(@RequestBody SimpleNode node) {
         QuakeNode q = findNode(node.getData());
         ServiceResponse<HeapData> response;
         if(q != null) {
             quakeHeap.delete(q);
-            displayHeap();
             List<List<SimpleNode>> treeList = transformHeap();
             HeapData data = new HeapData(treeList, quakeHeap.getMaxDegree(), quakeHeap.getMin(), quakeHeap.getLeavesCount());
-            response = new ServiceResponse<HeapData>("success",data);
+            response = new ServiceResponse<HeapData>("success",data,"Deletion Successful");
         } else {
-            response = new ServiceResponse<HeapData>("failed",new HeapData());
+            response = new ServiceResponse<HeapData>("failed",new HeapData(),"Node Not Found");
         }
+        return new ResponseEntity<Object>(response, HttpStatus.OK);
+    }
+
+    @PostMapping("/decrease")
+    public ResponseEntity<Object> decrease(@RequestBody SimpleNode node) {
+        ServiceResponse<HeapData> response;
+        if(node.getId() >= node.getData()) {
+            response = new ServiceResponse<HeapData>("failed",new HeapData(),"Decreased Value Invalid");
+            return new ResponseEntity<Object>(response, HttpStatus.OK);
+        }
+        QuakeNode q = findNode(node.getData());
+        if(q != null) {
+            quakeHeap.decreaseKey(q, node.getId());
+            List<List<SimpleNode>> treeList = transformHeap();
+            HeapData data = new HeapData(treeList, quakeHeap.getMaxDegree(), quakeHeap.getMin(), quakeHeap.getLeavesCount());
+            response = new ServiceResponse<HeapData>("success",data,"Key Decreased");
+        } else {
+            response = new ServiceResponse<HeapData>("failed",new HeapData(),"Node Not Found");
+        }
+        return new ResponseEntity<Object>(response, HttpStatus.OK);
+    }
+
+    @PostMapping("/extract")
+    public ResponseEntity<Object> extract() {
+        quakeHeap.extractMin();
+        List<List<SimpleNode>> treeList = transformHeap();
+        HeapData data = new HeapData(treeList, quakeHeap.getMaxDegree(), quakeHeap.getMin(), quakeHeap.getLeavesCount());
+        ServiceResponse<HeapData> response = new ServiceResponse<HeapData>("success",data,"Min Extracted");
         return new ResponseEntity<Object>(response, HttpStatus.OK);
     }
 }

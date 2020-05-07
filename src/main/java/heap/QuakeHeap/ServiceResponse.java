@@ -10,4 +10,5 @@ import lombok.NoArgsConstructor;
 public class ServiceResponse<T> {
     private String status;
     private T data;
+    private String message;
 }

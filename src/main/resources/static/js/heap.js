@@ -1,9 +1,9 @@
 $(document).ready(function() {
     var canvas = d3.select(".canvas");
     var svg = canvas.append('svg')
-        .attr('height',800)
-        .attr('width',800);
-    var radius = 10;
+        .attr('height', 800)
+        .attr('width', 1000);
+    var radius = 15;
 
     function getTreeCoordinates(coordinates, tree, node, x, dist, inc) {
 
@@ -66,7 +66,7 @@ $(document).ready(function() {
     function getCoordinates(data) {
 
         var y0 = 100;
-        var x0 = 50;
+        var x0 = 100;
         var xDist = 30;
         var yDist = 50;
         var xInc = 20;
@@ -103,11 +103,10 @@ $(document).ready(function() {
     function drawHeap(heapCoordinates) {
 
         groups = svg.selectAll('g')
-                     .data(heapCoordinates,(d)=>"group"+d.id)
-
+                     .data(heapCoordinates,(d)=>"group"+d.id);
         groupEnter = groups.enter()
                             .append('g')
-                            .attr('id',(d)=>"group"+d.id)
+                            .attr('id',(d)=>"group"+d.id);
 
         groups.selectAll('circle')
                .data(heapCoordinates,(d)=>"circle"+d.id)
@@ -129,7 +128,8 @@ $(document).ready(function() {
                .attr('y',(d)=>d.cy)
                .text((d)=>d.data)
                .attr('text-anchor','middle')
-               .attr('dy','.35em')
+               .attr('dy','.35em');
+
 
         groupEnter.append('circle')
                    .attr('id',(d)=>"circle"+d.id)
@@ -153,13 +153,17 @@ $(document).ready(function() {
                    .attr('y',(d)=>d.cy)
                    .text((d)=>d.data)
                    .attr('text-anchor','middle')
-                   .attr('dy','.35em')
+                   .attr('dy','.35em');
 
         groups.exit()
+               .attr("fill-opacity", 1)
+               .attr("stroke-opacity", 1)
                .transition()
                .duration(500)
-               .ease(d3.easeLinear)
+               .attr("fill-opacity", 0)
+               .attr("stroke-opacity", 0)
                .remove();
+
     }
 
     function drawLines(lineCoordinates) {
@@ -191,9 +195,10 @@ $(document).ready(function() {
               .attr('stroke','black');
 
         lines.exit()
+              .attr("stroke-opacity", 1)
               .transition()
               .duration(500)
-              .ease(d3.easeLinear)
+              .attr("stroke-opacity", 0)
               .remove();
 
     }
@@ -220,18 +225,13 @@ $(document).ready(function() {
             dataType : 'json',
             success: function(result) {
                 if(result.status == "success") {
-
-                    console.log('Insertion was successful.');
-
+                    console.log(result.message);
                     var coordinates = getCoordinates(result.data);
-
                     drawHeap(coordinates.heapCoordinates);
-
                     drawLines(coordinates.lineCoordinates);
-
                 }
                 else {
-                    console.log("Insertion failed.")
+                    alert(result.message);
                 }
                 console.log(result);
                 $("#nodeVal").val('');
@@ -248,7 +248,6 @@ $(document).ready(function() {
         var formData = {
             data : $("#nodeValDel").val()
         };
-
         $.ajax({
             type : "POST",
             contentType : "application/json",
@@ -257,18 +256,13 @@ $(document).ready(function() {
             dataType : 'json',
             success: function(result) {
                 if(result.status == "success") {
-
-                    console.log('Deletion was successful.');
-
+                    console.log(result.message);
                     var coordinates = getCoordinates(result.data);
-
                     drawHeap(coordinates.heapCoordinates);
-
                     drawLines(coordinates.lineCoordinates);
-
                 }
                 else {
-                    console.log("Deletion failed.")
+                    alert(result.message);
                 }
                 console.log(result);
                 $("#nodeValDel").val('');
@@ -280,4 +274,70 @@ $(document).ready(function() {
             }
         });
     }
+
+    $("#decrease").submit(function(event) {
+        event.preventDefault();
+        $('#decModal').modal('hide');
+        console.log($("#nodeDec").val())
+        var formData = {
+            data : $("#nodeDec").val(),
+            id: $("#valDec").val()
+        }
+        $.ajax({
+            type : "POST",
+            contentType : "application/json",
+            url : "decrease",
+            data : JSON.stringify(formData),
+            dataType : 'json',
+            success: function(result) {
+                if(result.status == "success") {
+                    console.log(result.message);
+                    var coordinates = getCoordinates(result.data);
+                    drawHeap(coordinates.heapCoordinates);
+                    drawLines(coordinates.lineCoordinates);
+                }
+                else {
+                    alert(result.message);
+                }
+                console.log(result);
+                $("#nodeDec").val('');
+                $("#valDec").val('');
+            },
+            error: function(e) {
+                console.log("ERROR: ",e);
+                alert("ERROR!");
+                $("#nodeDec").val('');
+                $("#valDec").val('');
+            }
+        });
+    });
+
+    $("#confirm").click(function() {
+        $("#decrease").submit();
+    });
+
+    $('#extract').click(function() {
+        $.ajax({
+            type : "POST",
+            contentType : "application/json",
+            url : "extract",
+            success: function(result) {
+                if(result.status == "success") {
+                    console.log(result.message);
+                    var coordinates = getCoordinates(result.data);
+                    drawHeap(coordinates.heapCoordinates);
+                    drawLines(coordinates.lineCoordinates);
+                }
+                else {
+                    alert(result.message);
+                }
+                console.log(result);
+            },
+            error: function(e) {
+                console.log("ERROR: ",e);
+                alert("ERROR!");
+            }
+        });
+    });
+
 });
