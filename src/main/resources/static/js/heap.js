@@ -4,6 +4,7 @@ $(document).ready(function() {
         .attr('height', 800)
         .attr('width', 1000);
     var radius = 15;
+    var states = [];
 
     function getTreeCoordinates(coordinates, tree, node, x, dist, inc) {
 

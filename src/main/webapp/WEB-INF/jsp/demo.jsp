@@ -6,6 +6,7 @@
 	<link rel="stylesheet" type="text/css" href="css/navbar.css">
 	<link rel="stylesheet" type="text/css" href="css/demo.css">
 	<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;700&display=swap" rel="stylesheet">
+	<script src="https://kit.fontawesome.com/45bd1cd9ae.js" crossorigin="anonymous"></script>
 </head>
 <body>
 	<nav class="navbar navbar-expand-md navbar-light navbar-custom">
@@ -27,6 +28,13 @@
 		  	</div>
 		</div>
 	</nav>
+
+	<header class="bg-primary text-white">
+        <div class="container text-center">
+            <p> A better way to do heaps. Based on a <a href="http://tmc.web.engr.illinois.edu/heap_ianfest.pdf" style="color:yellow">paper</a> by <a href="http://tmc.web.engr.illinois.edu/" style="color:yellow">Timothy Chan </a> </p>
+        </div>
+    </header>
+
     <div class="container mt-3">
         <div class="row">
             <form class="form-inline col-lg-4 col-md-6 col-12" id='insert'>
@@ -81,6 +89,12 @@
         </div>
       </div>
     </div>
+
+    <footer class="py-3 bg-dark">
+        <div class="container text-center">
+            <a class="m-0 text-center text-white" href="https://github.com/Kevinxu99/Quake-Heap">Developed by Kevin Xu and Naman Chimnani</a>
+        </div>
+    </footer>
 
     <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
