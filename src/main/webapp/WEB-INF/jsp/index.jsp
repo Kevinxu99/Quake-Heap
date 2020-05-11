@@ -5,18 +5,6 @@
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 	<link rel="stylesheet" type="text/css" href="css/navbar.css">
 	<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;700&display=swap" rel="stylesheet">
-    <!-- i tried to add in dynamic resizing of images but it seems to be slightly weird -->
-     <style> 
-            .fitted { 
-                width:135%; 
-                height:500px; 
-            } 
-            img { 
-                width:100%; 
-                height:100%; 
-                object-fit:cover; 
-            } 
-        </style> 
 </head>
 <body>
 	<nav class="navbar navbar-expand-md navbar-light navbar-custom">
@@ -111,13 +99,8 @@
                 <div class="col-lg-8 mx-auto">
                     <h2 class="mt-3">Structure</h2>
                     <p class="lead">Quake heaps are basically a collection of multiple tournament trees (with distinct height most of the time) with a constraint on the sum of each level. The ratio of the num of nodes on level i+1 to i should be less than equal to some alpha value that is set to be between 1/2 and 1.<br>
-                    
-                       <!--  <div class="fitted">
-                            <img class="center-fit" src="../../images/structure.jpg" alt="Structure of the tree">
-                        </div>  -->
-                        <img src="../../images/structure.jpg" alt="Structure of the tree" width="653" height="342"/> 
-                    <br>
-                     Now tournament tree is a binary tree like structure with all the data at the root level and at each consecutive level the smaller of the 2 children is chosen. The chosen child is then cloned up (stored using pointers).</p>
+                    <img class="my-2" src="../../images/structure.jpg" alt="Structure of the tree" width="653" height="342"/><br>
+                    Now tournament tree is a binary tree like structure with all the data at the root level and at each consecutive level the smaller of the 2 children is chosen. The chosen child is then cloned up (stored using pointers).</p>
                 </div>
             </div>
         </div>
@@ -160,15 +143,15 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-8 mx-auto">
-                    <h2 class="mt-3">Ammortised Analysis</h2>
+                    <h2 class="mt-3">Amortised Analysis</h2>
                     <p class="lead">
                         Lets use the potential method to show that our Delete operation turns out to be O(log(n)). Using the potential function, <br>phi = N + (c * T) + (2 * c * B).<br>Where:<br> N is the # of nodes in the heap (this is not the no of keys in the heap)<br>T is the # of tournament trees in the heap<br>B is the # of degree one nodes (bad nodes). 
                         <br>
-                        <div class="fitted">
-                        <img src="../../images/analysis.png" alt="Structure of the tree" />
-                        </div>
                     </p>
                 </div>
+            </div>
+            <div class="row text-center mb-3 mx-3">
+                <img src="../../images/analysis.png" alt="Structure of the tree" class="img-fluid rounded"/>
             </div>
         </div>
     </section>
