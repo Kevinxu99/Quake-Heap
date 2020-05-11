@@ -98,7 +98,9 @@
             <div class="row">
                 <div class="col-lg-8 mx-auto">
                     <h2 class="mt-3">Structure</h2>
-                    <p class="lead">Quake heaps are basically a collection of multiple tournament trees (with distinct height most of the time) with a constraint on the sum of each level. The ratio of the num of nodes on level i+1 to i should be less than equal to some alpha value that is set to be between 1/2 and 1.<br> ADD A PICTURE HERE? <br> Now tournament tree is a binary tree like structure with all the data at the root level and at each consecutive level the smaller of the 2 children is chosen. The chosen child is then cloned up (stored using pointers).</p>
+                    <p class="lead">Quake heaps are basically a collection of multiple tournament trees (with distinct height most of the time) with a constraint on the sum of each level. The ratio of the num of nodes on level i+1 to i should be less than equal to some alpha value that is set to be between 1/2 and 1.<br>
+                    <img class="my-2" src="../../images/structure.jpg" alt="Structure of the tree" width="653" height="342"/><br>
+                    Now tournament tree is a binary tree like structure with all the data at the root level and at each consecutive level the smaller of the 2 children is chosen. The chosen child is then cloned up (stored using pointers).</p>
                 </div>
             </div>
         </div>
@@ -129,10 +131,27 @@
                     <dd class="col-sm-9">We walk up from the leaf level and delete all the clones we had higher up in the tree. Now we also pay for being lazy in the other operations. We link trees if they are equal heights hence leading us to 1 tree of each size (turns out to be O(log(n)) ammortised). BUT...<br> This can lead us to a alpha violation in comes ...drum roll... the QUAKE operation </dd>
 
                     <dt class="col-sm-3">Quake</dt>
-                    <dd class="col-sm-9">We remove all the nodes, in all trees, above the lowest alpha violation that is found whiel deleting. This seems like O(n) but ammortisation saves the day :) </dd>
+                    <dd class="col-sm-9">We remove all the nodes, in all trees, above the lowest alpha violation that is found while deleting. This seems like O(n) but ammortisation saves the day :) </dd>
 
                     </dl></p>
                 </div>
+            </div>
+        </div>
+    </section>
+
+     <section id="ammortisation" class="bg-light">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <h2 class="mt-3">Amortised Analysis</h2>
+                    <p class="lead">
+                        Lets use the potential method to show that our Delete operation turns out to be O(log(n)). Using the potential function, <br>phi = N + (c * T) + (2 * c * B).<br>Where:<br> N is the # of nodes in the heap (this is not the no of keys in the heap)<br>T is the # of tournament trees in the heap<br>B is the # of degree one nodes (bad nodes). 
+                        <br>
+                    </p>
+                </div>
+            </div>
+            <div class="row text-center mb-3 mx-3">
+                <img src="../../images/analysis.png" alt="Structure of the tree" class="img-fluid rounded"/>
             </div>
         </div>
     </section>

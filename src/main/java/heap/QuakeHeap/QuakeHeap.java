@@ -55,6 +55,7 @@ public class QuakeHeap implements Heap{
 		q1.getClone().setData(newVal);
 		if (q1.getParent() != null)
 			cut(q1.getClone().getHighestClone());
+		min = this.findMin();
 	}
 
 	public void delete(Node node) {
