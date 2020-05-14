@@ -71,6 +71,7 @@ public class Demo {
 
     @GetMapping("/demo")
     public String demo() {
+        quakeHeap = new QuakeHeap();
         return "demo";
     }
 
