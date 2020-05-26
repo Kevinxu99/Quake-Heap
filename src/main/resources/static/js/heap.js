@@ -316,7 +316,8 @@ $(document).ready(function() {
 
     $("#speedAdj").click(function(){
          event.preventDefault();
-         speed = 2200 - $("#speed").val()*100
+         speed = 2200 - $("#speed").val()*100;
+         $("#speed").val('');
     });
 
     $("#confirm").click(function() {
