@@ -4,6 +4,7 @@ $(document).ready(function() {
         .attr('height', 800)
         .attr('width', 1000);
     var radius = 15;
+    var speed = 1500;
 
     function getTreeCoordinates(coordinates, tree, node, x, dist, inc) {
 
@@ -111,7 +112,7 @@ $(document).ready(function() {
         groups.selectAll('circle')
                .data(heapCoordinates,(d)=>"circle"+d.id)
                .transition()
-               .duration(750)
+               .duration(speed)
                .ease(d3.easeLinear)
                .attr('cx',(d)=>d.cx)
                .attr('cy',(d)=>d.cy)
@@ -122,7 +123,7 @@ $(document).ready(function() {
         groups.selectAll('text')
                .data(heapCoordinates,(d)=>"text"+d.id)
                .transition()
-               .duration(750)
+               .duration(speed)
                .ease(d3.easeLinear)
                .attr('x',(d)=>d.cx)
                .attr('y',(d)=>d.cy)
@@ -134,8 +135,8 @@ $(document).ready(function() {
         groupEnter.append('circle')
                    .attr('id',(d)=>"circle"+d.id)
                    .transition()
-                   .duration(750)
-                   .delay(500)
+                   .duration(speed)
+                   .delay(speed - 150)
                    .ease(d3.easeLinear)
                    .attr('cx', (d)=> d.cx)
                    .attr('cy', (d)=> d.cy)
@@ -146,8 +147,8 @@ $(document).ready(function() {
         groupEnter.append('text')
                    .attr('id',(d)=>"text"+d.id)
                    .transition()
-                   .duration(750)
-                   .delay(500)
+                   .duration(speed)
+                   .delay(speed - 150)
                    .ease(d3.easeLinear)
                    .attr('x',(d)=>d.cx)
                    .attr('y',(d)=>d.cy)
@@ -159,7 +160,7 @@ $(document).ready(function() {
                .attr("fill-opacity", 1)
                .attr("stroke-opacity", 1)
                .transition()
-               .duration(500)
+               .duration(speed)
                .attr("fill-opacity", 0)
                .attr("stroke-opacity", 0)
                .remove();
@@ -177,16 +178,16 @@ $(document).ready(function() {
                     .attr('stroke','black')
 
         lines.transition()
-              .duration(750)
-              .delay(750)
+              .duration(speed)
+              .delay(speed-150)
               .ease(d3.easeLinear);
 
         lines.enter()
               .append('line')
               .attr('id',(d)=>d.id1+"to"+d.id2)
               .transition()
-              .duration(750)
-              .delay(500)
+              .duration(speed)
+              .delay(speed -150)
               .ease(d3.easeLinear)
               .attr('x1',(d)=>d.x1)
               .attr('x2',(d)=>d.x2)
@@ -197,7 +198,7 @@ $(document).ready(function() {
         lines.exit()
               .attr("stroke-opacity", 1)
               .transition()
-              .duration(500)
+              .duration(speed)
               .attr("stroke-opacity", 0)
               .remove();
 
@@ -213,6 +214,7 @@ $(document).ready(function() {
         deleteNode();
     });
 
+    
     function insertNode() {
         var formData = {
             data : $("#nodeVal").val()
@@ -310,6 +312,11 @@ $(document).ready(function() {
                 $("#valDec").val('');
             }
         });
+    });
+
+    $("#speedAdj").click(function(){
+         event.preventDefault();
+         speed = 2200 - $("#speed").val()*100
     });
 
     $("#confirm").click(function() {

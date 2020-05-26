@@ -55,7 +55,13 @@
             <div class="col-lg-2 col-md-6 col-12">
                 <button type="button" class="btn btn-outline-dark btn-sm mb-2 ml-3" id="extract">Extract Min</button>
             </div>
-        </div>
+          <form class="form-inline col-lg-4 col-md-6 col-12" id='speedAdj'>
+              <div class="form-group mx-3 mb-2">
+                <input type="number" class="form-control form-control-sm" id = "speed" placeholder="1(slow) - 20(fast)">
+              </div>
+              <button type="submit" class="btn btn-outline-dark btn-sm mb-2">Speed Adjust</button>
+            </form>
+
     </div>
 
     <div class='canvas'>
